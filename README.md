@@ -1,0 +1,1 @@
+Sample maven project for testing Flex apps with selenium

@@ -1,0 +1,6 @@
+/flex/target
+/selenium/target
+/.settings
+.project
+.classpath
+/.git

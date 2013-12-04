@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<properties>
+		<flex-version>3.3.0.4852</flex-version>
+	</properties>
+
+	<groupId>test</groupId>
+	<artifactId>ExternalInterface-Flex</artifactId>
+	<version>1.0</version>
+	<name>Sample flex dev proyect</name>
+	<packaging>swf</packaging>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.flexmojos</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<version>3.8</version>
+				<extensions>true</extensions>
+				<dependencies>
+					<dependency>
+						<groupId>com.adobe.flex</groupId>
+						<artifactId>compiler</artifactId>
+						<version>${flex-version}</version>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.flexmojos</groupId>
+				<artifactId>flexmojos-unittest-flexunit4</artifactId>
+				<version>3.8</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<nonFilteredFileExtensions>
+								<nonFilteredFileExtension>swf</nonFilteredFileExtension>
+							</nonFilteredFileExtensions>
+							<outputDirectory>${basedir}/target/www</outputDirectory>
+							<resources>
+								<resource> <directory>target</directory> <filtering>true</filtering> 
+									<includes> <include>ExternalInterface-Flex-1.0.swf</include> </includes> 
+									</resource>
+								<resource>
+									<directory>${basedir}/src/main/resources</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>index.htm</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>set-system-properties</goal>
+						</goals>
+						<configuration>
+							<properties>
+								<property>
+									<name>logback.configurationFile</name>
+									<value>${basedir}/src/main/resources/logback.xml</value>
+								</property>
+							</properties>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.1.0.v20131115</version>
+				<executions>
+					<execution>
+						<id>start-jetty</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<stopPort>8888</stopPort>
+							<stopKey>SOTP</stopKey>
+							<webAppSourceDirectory>${basedir}/target/www</webAppSourceDirectory>
+							<reload>manual</reload>
+							<scanIntervalSeconds>0</scanIntervalSeconds>
+							<daemon>true</daemon>
+							<contextHandler implementation="org.eclipse.jetty.server.handler.ContextHandler">
+								<contextPath>/</contextPath>
+								<resourceBase>${basedir}/target/www</resourceBase>
+								<handler implementation="org.eclipse.jetty.server.handler.ResourceHandler" />
+							</contextHandler>
+						</configuration>
+					</execution>
+					<!-- <execution> <id>stop-jetty</id> <phase>post-verify</phase> <goals> 
+						<goal>stop</goal> </goals> <configuration> <stopPort>8888</stopPort> <stopKey>SOTP</stopKey> 
+						</configuration> </execution> -->
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>ch.qos.logback</groupId>
+						<artifactId>logback-classic</artifactId>
+						<version>0.9.29</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+
+	</build>
+
+	<repositories>
+		<repository>
+			<id>flexmojos</id>
+			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>flexmojos</id>
+			<url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>flex-framework</artifactId>
+			<version>${flex-version}</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>flexlib</groupId>
+			<artifactId>flexlib</artifactId>
+			<version>2.5</version>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>org.sonatype.flexmojos</groupId>
+			<artifactId>flexmojos-unittest-flexunit4</artifactId>
+			<version>3.8</version>
+			<type>swc</type>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
