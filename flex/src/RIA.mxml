@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<mx:Application xmlns:flexlib="http://code.google.com/p/flexlib/" xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()">
+<mx:Application xmlns:flexlib="http://code.google.com/p/flexlib/" xmlns:mx="http://www.adobe.com/2006/mxml" 
+creationComplete="bootstrapFlexPilot();">
 	
-    <mx:Script>
+<mx:Script>
 <![CDATA[
-    import mx.controls.Alert;
-    
-    public function init():void {
-        ExternalInterface.addCallback("type",type)        
-    }    
+  // Import and initialize Flex Pilot bootstrapper
+  import org.flex_pilot.FPBootstrap;
+  
+  private function bootstrapFlexPilot():void {
 
-    private function type(id:String, msg:String):void {
-    
-        //Alert.show("Trying to type at " + id)        
-        var elem:Object = box.getChildByName(id) as Object;
-        //Alert.show(String(elem));
-        if (elem is TextInput) {
-           elem.text = msg;
-           //trace("Typed '" + msg + "' to element " + String(elem) );
-        }
-    }
+    FPBootstrap.flex_pilotLibPath = 'FlexPilot-3-stable.swf';
+    FPBootstrap.init(application);
+  }
 ]]>
-    </mx:Script>
+</mx:Script>
 
 	<mx:Style>
 	    .linkButtonWindowShade {
@@ -44,12 +37,15 @@
 	    }
 	</mx:Style>
   
+   
   <mx:VBox id="box">
     <mx:TextInput id="test1"/> 
     <mx:TextInput id="test2"/> 
   </mx:VBox>
   
-	<!-- <mx:VBox id="root">
+  
+  <!--
+   <mx:VBox id="myroot">
       <flexlib:WindowShade id="ws1" tabChildren="{ws1.opened}" styleName="linkButtonWindowShade" 
       	label="Personal Information" width="100%">
           <mx:Form>
@@ -128,6 +124,7 @@
             </mx:FormItem>
         </mx:Form>
      </flexlib:WindowShade>
-    </mx:VBox> -->
+    </mx:VBox>
+-->
     
 </mx:Application>

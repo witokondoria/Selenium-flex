@@ -15,12 +15,22 @@
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
+
+		<resources>
+			<resource>
+				<directory>${basedir}/lib</directory>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.sonatype.flexmojos</groupId>
 				<artifactId>flexmojos-maven-plugin</artifactId>
 				<version>3.8</version>
 				<extensions>true</extensions>
+				<configuration>
+					<debug>true</debug>					
+				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>com.adobe.flex</groupId>
@@ -30,14 +40,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			<plugin>
-				<groupId>org.sonatype.flexmojos</groupId>
-				<artifactId>flexmojos-unittest-flexunit4</artifactId>
-				<version>3.8</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -55,14 +58,25 @@
 							</nonFilteredFileExtensions>
 							<outputDirectory>${basedir}/target/www</outputDirectory>
 							<resources>
-								<resource> <directory>target</directory> <filtering>true</filtering> 
-									<includes> <include>ExternalInterface-Flex-1.0.swf</include> </includes> 
-									</resource>
+								<resource>
+									<directory>target</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>${project.artifactId}-${project.version}.${project.packaging}</include>
+									</includes>
+								</resource>
 								<resource>
 									<directory>${basedir}/src/main/resources</directory>
 									<filtering>true</filtering>
 									<includes>
 										<include>index.htm</include>
+									</includes>
+								</resource>
+								<resource>
+									<directory>${basedir}/lib</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>FlexPilot-3-stable.swf</include>
 									</includes>
 								</resource>
 							</resources>
@@ -115,9 +129,6 @@
 							</contextHandler>
 						</configuration>
 					</execution>
-					<!-- <execution> <id>stop-jetty</id> <phase>post-verify</phase> <goals> 
-						<goal>stop</goal> </goals> <configuration> <stopPort>8888</stopPort> <stopKey>SOTP</stopKey> 
-						</configuration> </execution> -->
 				</executions>
 				<dependencies>
 					<dependency>
@@ -128,7 +139,6 @@
 				</dependencies>
 			</plugin>
 		</plugins>
-
 	</build>
 
 	<repositories>
@@ -146,24 +156,29 @@
 	</pluginRepositories>
 
 	<dependencies>
+
+<!--  		<dependency>
+			<groupId>org.seleniumflexapi</groupId>
+			<artifactId>seleniumflexapi</artifactId>
+			<version>1</version>
+			<type>swc</type>
+			<scope>internal</scope>			
+		</dependency>  -->
+ 
 		<dependency>
 			<groupId>com.adobe.flex.framework</groupId>
 			<artifactId>flex-framework</artifactId>
 			<version>${flex-version}</version>
 			<type>pom</type>
 		</dependency>
+
 		<dependency>
 			<groupId>flexlib</groupId>
 			<artifactId>flexlib</artifactId>
 			<version>2.5</version>
 			<type>swc</type>
 		</dependency>
-		<dependency>
-			<groupId>org.sonatype.flexmojos</groupId>
-			<artifactId>flexmojos-unittest-flexunit4</artifactId>
-			<version>3.8</version>
-			<type>swc</type>
-			<scope>test</scope>
-		</dependency>
+
 	</dependencies>
+
 </project>

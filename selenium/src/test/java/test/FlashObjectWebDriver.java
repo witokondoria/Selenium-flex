@@ -21,6 +21,14 @@ public class FlashObjectWebDriver {
 		return result != null ? result.toString() : null;
 	}
 
+	public String callFlashObjectMessage(final String functionName,
+			final String... args) {
+		final Object result = ((JavascriptExecutor) webDriver).executeScript(
+				makeJsFunctionMessage(functionName, args), new Object[0]);
+
+		return result != null ? result.toString() : null;
+	}
+	
 	private String makeJsFunction(final String functionName,
 			final String... args) {
 		final StringBuffer functionArgs = new StringBuffer();
@@ -30,11 +38,36 @@ public class FlashObjectWebDriver {
 				if (i > 0) {
 					functionArgs.append(",");
 				}
-				functionArgs.append(String.format("'%1$s'", args[i]));
+				if ((args[i].length() > 0) && (args[i].substring(0,1).equals("{"))) {
+					functionArgs.append(String.format("%1$s", args[i]));
+				}
+				else {
+					functionArgs.append(String.format("'%1$s'", args[i]));					
+				}
 			}
-		}
+		}		
 		return String.format("return document.%1$s.%2$s(%3$s);", flashObjectId,
 				functionName, functionArgs);
 	}
 
+	private String makeJsFunctionMessage(final String functionName,
+			final String... args) {
+		final StringBuffer functionArgs = new StringBuffer();
+
+		if (args.length > 0) {
+			for (int i = 0; i < args.length; i++) {
+				if (i > 0) {
+					functionArgs.append(",");
+				}
+				if ((args[i].length() > 0) && (args[i].substring(0,1).equals("{"))) {				
+					functionArgs.append(String.format("%1$s", args[i]));
+				}
+				else {
+					functionArgs.append(String.format("'%1$s'", args[i]));					
+				}			}
+		}
+		return String.format("return document.%1$s.%2$s(%3$s).message;", flashObjectId,
+				functionName, functionArgs);
+	}
+	
 }

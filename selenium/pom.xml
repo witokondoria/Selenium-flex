@@ -29,11 +29,30 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.16</version>
 				<configuration>
 					<parallel>classes</parallel>
 					<threadCount>10</threadCount>
+					<properties>
+						<property>
+							<name>usedefaultlisteners</name>
+							<value>false</value>
+						</property>
+						<property>
+							<name>listener</name>
+							<value>org.tap4j.ext.testng.listener.TapListenerClassYaml</value>
+						</property>
+					</properties>
 				</configuration>
 				<executions>
 					<execution>
@@ -73,6 +92,11 @@
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>6.8.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tap4j</groupId>
+			<artifactId>tap4j-ext</artifactId>
+			<version>4.0.5</version>
 		</dependency>
 	</dependencies>
 </project>
